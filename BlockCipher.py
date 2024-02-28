@@ -1,3 +1,4 @@
+import secrets
 from enum import Enum
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
@@ -30,6 +31,13 @@ class BlockCipher:
         cipher = AES.new(self.__key, AES.MODE_ECB)
         return cipher.decrypt(data)
 
+    def __generate_iv(self):
+        self.__iv = secrets.token_bytes(self.__BLOCK_SIZE)
+
+    @staticmethod
+    def xor(vector1: bytes, vector2: bytes) -> bytes:
+        return bytes(b1 ^ b2 for b1, b2 in zip(vector1, vector2))
+
     def set_key(self, key: bytes):
         if len(key) != 16:
             raise ValueError("Key length must be 16")
@@ -46,7 +54,13 @@ class BlockCipher:
 
                 return self.__block_cipher_encrypt(data)
             case Mode.CBC:
-                return b'b'
+                if is_final_block:
+                    data = pad(data, self.__BLOCK_SIZE, padding)
+
+                result = self.__block_cipher_encrypt(self.xor(data, self.__iv))
+                self.__iv = result
+
+                return result
             case Mode.CFB:
                 return b'c'
             case Mode.OFB:
@@ -64,7 +78,15 @@ class BlockCipher:
 
                 return cipher
             case Mode.CBC:
-                return b'b'
+                cipher = self.__block_cipher_decrypt(data)
+
+                result = self.xor(cipher, self.__iv)
+                self.__iv = data
+
+                if is_final_block:
+                    result = unpad(result, self.__BLOCK_SIZE, padding)
+
+                return result
             case Mode.CFB:
                 return b'c'
             case Mode.OFB:
@@ -73,6 +95,11 @@ class BlockCipher:
                 return b'e'
 
     def encrypt(self, data: bytes, iv: bytes = None) -> bytes:
+        if iv is not None:
+            self.__iv = iv
+        else:
+            self.__generate_iv()
+
         blocks = [data[i:i + self.__BLOCK_SIZE] for i in range(0, len(data), self.__BLOCK_SIZE)]
 
         ciphertext = b''
@@ -82,6 +109,11 @@ class BlockCipher:
         return ciphertext
 
     def decrypt(self, data: bytes, iv: bytes = None) -> bytes:
+        if iv is not None:
+            self.__iv = iv
+        else:
+            self.__generate_iv()
+
         blocks = [data[i:i + self.__BLOCK_SIZE] for i in range(0, len(data), self.__BLOCK_SIZE)]
 
         plaintext = b''
