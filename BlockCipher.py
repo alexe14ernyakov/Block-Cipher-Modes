@@ -62,7 +62,12 @@ class BlockCipher:
 
                 return result
             case Mode.CFB:
-                return b'c'
+                cipher = self.__block_cipher_encrypt(self.__iv)
+
+                result = self.xor(cipher, data)
+                self.__iv = result
+
+                return result
             case Mode.OFB:
                 return b'd'
             case Mode.CTR:
@@ -88,7 +93,12 @@ class BlockCipher:
 
                 return result
             case Mode.CFB:
-                return b'c'
+                cipher = self.__block_cipher_decrypt(self.__iv)
+
+                result = self.xor(cipher, data)
+                self.__iv = data
+
+                return result
             case Mode.OFB:
                 return b'd'
             case Mode.CTR:
