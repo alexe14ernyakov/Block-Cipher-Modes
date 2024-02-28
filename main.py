@@ -5,10 +5,10 @@ if __name__ == '__main__':
 
     data = b'cryptography-is-my-favorite-subject-in-university'
     b.set_key(b'sixteen-byte-key')
-    print(data, len(data))
+    print(data)
 
     enc = b.encrypt(data)
-    print(enc, len(data))
+    print(enc)
 
     dec = b.decrypt(enc)
-    print(dec, len(data))
+    print(dec)

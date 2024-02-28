@@ -1,6 +1,6 @@
 from enum import Enum
 from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
+from Crypto.Util.Padding import pad, unpad
 
 
 class Mode(Enum):
@@ -20,6 +20,7 @@ class BlockCipher:
 
         self.__key = key
         self.__mode = mode
+        self.__iv = None
 
     def __block_cipher_encrypt(self, data: bytes) -> bytes:
         cipher = AES.new(self.__key, AES.MODE_ECB)
@@ -41,7 +42,7 @@ class BlockCipher:
         match self.__mode:
             case Mode.ECB:
                 if is_final_block:
-                    data = pad(data, self.__BLOCK_SIZE)
+                    data = pad(data, self.__BLOCK_SIZE, padding)
 
                 return self.__block_cipher_encrypt(data)
             case Mode.CBC:
@@ -56,10 +57,12 @@ class BlockCipher:
     def process_block_decrypt(self, data: bytes, is_final_block: bool, padding: str) -> bytes:
         match self.__mode:
             case Mode.ECB:
-                if is_final_block:
-                    data = pad(data, self.__BLOCK_SIZE)
+                cipher = self.__block_cipher_decrypt(data)
 
-                return self.__block_cipher_decrypt(data)
+                if is_final_block:
+                    cipher = unpad(cipher, self.__BLOCK_SIZE, padding)
+
+                return cipher
             case Mode.CBC:
                 return b'b'
             case Mode.CFB:
@@ -74,7 +77,7 @@ class BlockCipher:
 
         ciphertext = b''
         for block in blocks:
-            ciphertext = ciphertext + self.process_block_encrypt(block, block == blocks[-1], 'PKCS7')
+            ciphertext = ciphertext + self.process_block_encrypt(block, block == blocks[-1], 'pkcs7')
 
         return ciphertext
 
@@ -83,6 +86,6 @@ class BlockCipher:
 
         plaintext = b''
         for block in blocks:
-            plaintext = plaintext + self.process_block_decrypt(block, block == blocks[-1], 'PKCS7')
+            plaintext = plaintext + self.process_block_decrypt(block, block == blocks[-1], 'pkcs7')
 
         return plaintext
