@@ -1,5 +1,30 @@
 from BlockCipher import BlockCipher, Mode
 from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+
+def task2_5():
+    BLOCK_SIZE = 16
+    plaintext = b'message-for-first-task'
+    key2 = b'sixteen-byte-key'
+    custom_iv = b'sixteen-bytes-iv'
+
+    bc2 = BlockCipher(key2, Mode.CBC)
+    cipher = AES.new(key2, AES.MODE_CBC, custom_iv)
+
+    print(f'Plaintext:                       {plaintext}')
+    encrypted2_1 = bc2.encrypt(plaintext, custom_iv)
+    print(f'Encrypted text with my own CBC:  {encrypted2_1}')
+    decrypted2_1 = cipher.decrypt(encrypted2_1)
+    print(f'Decrypted text with library CBC: {unpad(decrypted2_1, BLOCK_SIZE)}\n')
+
+    cipher = AES.new(key2, AES.MODE_CBC, custom_iv)
+
+    print(f'Plaintext:                       {plaintext}')
+    encrypted2_1 = cipher.encrypt(pad(plaintext, BLOCK_SIZE))
+    print(f'Encrypted text with library CBC: {encrypted2_1}')
+    decrypted2_1 = bc2.decrypt(encrypted2_1, custom_iv)
+    print(f'Decrypted text with my own CBC:  {decrypted2_1}\n')
 
 
 def task3():
@@ -40,7 +65,7 @@ def task3():
     print()
 
     hex_key3_4 = '36f18357be4dbd77f050515c73fcf9f2'
-    key3_4 = bytes.fromhex(hex_key3_3)
+    key3_4 = bytes.fromhex(hex_key3_4)
 
     hex_ciphertext3_4 = '770b80259ec33beb2561358a9f2dc617e46218c0a53cbeca695ae45faa8952aa0e311bde9d4e01726d3184c34451'
     iv3_4 = bytes.fromhex(hex_ciphertext3_4[0:32])
@@ -98,6 +123,9 @@ def task4():
 
 
 def main():
+    print('TASK 2.5')
+    task2_5()
+
     print('TASK 3')
     task3()
 
