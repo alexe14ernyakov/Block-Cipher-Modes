@@ -15,13 +15,16 @@ class Mode(Enum):
 class BlockCipher:
     __BLOCK_SIZE = 16
 
-    def __init__(self, key, mode):
+    def __init__(self, key: bytes, mode: Mode):
         if len(key) != self.__BLOCK_SIZE:
             raise ValueError("Key length must be 16")
-
         self.__key: bytes = key
-        self.__mode: Mode  = mode
-        self.__iv: bytes = None
+
+        if mode not in Mode:
+            raise ValueError("Unknown mode")
+        self.__mode: Mode = mode
+
+        self.__iv: bytes | None = None
 
     def __block_cipher_encrypt(self, data: bytes) -> bytes:
         cipher = AES.new(self.__key, AES.MODE_ECB)
@@ -44,6 +47,8 @@ class BlockCipher:
         self.__key = key
 
     def set_mode(self, mode: Mode):
+        if mode not in Mode:
+            raise ValueError("Unknown mode")
         self.__mode = mode
 
     def process_block_encrypt(self, data: bytes, is_final_block: bool, padding: str) -> bytes:
@@ -53,6 +58,7 @@ class BlockCipher:
                     data = pad(data, self.__BLOCK_SIZE, padding)
 
                 return self.__block_cipher_encrypt(data)
+
             case Mode.CBC:
                 if is_final_block:
                     data = pad(data, self.__BLOCK_SIZE, padding)
@@ -61,6 +67,7 @@ class BlockCipher:
                 self.__iv = result
 
                 return result
+
             case Mode.CFB:
                 cipher = self.__block_cipher_encrypt(self.__iv)
 
@@ -68,6 +75,7 @@ class BlockCipher:
                 self.__iv = result
 
                 return result
+
             case Mode.OFB:
                 cipher = self.__block_cipher_encrypt(self.__iv)
                 self.__iv = cipher
@@ -75,6 +83,7 @@ class BlockCipher:
                 result = self.xor(cipher, data)
 
                 return result
+
             case Mode.CTR:
                 cipher = self.__block_cipher_encrypt(self.__iv)
                 result = self.xor(cipher, data)
@@ -94,6 +103,7 @@ class BlockCipher:
                     cipher = unpad(cipher, self.__BLOCK_SIZE, padding)
 
                 return cipher
+
             case Mode.CBC:
                 cipher = self.__block_cipher_decrypt(data)
 
@@ -104,6 +114,7 @@ class BlockCipher:
                     result = unpad(result, self.__BLOCK_SIZE, padding)
 
                 return result
+
             case Mode.CFB:
                 cipher = self.__block_cipher_encrypt(self.__iv)
 
@@ -111,6 +122,7 @@ class BlockCipher:
                 self.__iv = data
 
                 return result
+
             case Mode.OFB:
                 cipher = self.__block_cipher_encrypt(self.__iv)
                 self.__iv = cipher
@@ -118,6 +130,7 @@ class BlockCipher:
                 result = self.xor(cipher, data)
 
                 return result
+
             case Mode.CTR:
                 cipher = self.__block_cipher_encrypt(self.__iv)
                 result = self.xor(cipher, data)
@@ -132,7 +145,6 @@ class BlockCipher:
         if iv is not None:
             if len(iv) != self.__BLOCK_SIZE:
                 raise ValueError("IV length must be 16")
-
             self.__iv = iv
         else:
             self.__generate_iv()
@@ -149,7 +161,6 @@ class BlockCipher:
         if iv is not None:
             if len(iv) != self.__BLOCK_SIZE:
                 raise ValueError("IV length must be 16")
-
             self.__iv = iv
         else:
             self.__generate_iv()
