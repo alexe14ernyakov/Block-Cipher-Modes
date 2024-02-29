@@ -76,7 +76,14 @@ class BlockCipher:
 
                 return result
             case Mode.CTR:
-                return b'e'
+                cipher = self.__block_cipher_encrypt(self.__iv)
+                result = self.xor(cipher, data)
+
+                int_iv = int.from_bytes(self.__iv, byteorder='big')
+                int_iv += 1
+                self.__iv = int_iv.to_bytes((int_iv.bit_length() + 7) // 8, byteorder='big')
+
+                return result
 
     def process_block_decrypt(self, data: bytes, is_final_block: bool, padding: str) -> bytes:
         match self.__mode:
@@ -98,7 +105,7 @@ class BlockCipher:
 
                 return result
             case Mode.CFB:
-                cipher = self.__block_cipher_decrypt(self.__iv)
+                cipher = self.__block_cipher_encrypt(self.__iv)
 
                 result = self.xor(cipher, data)
                 self.__iv = data
@@ -112,7 +119,14 @@ class BlockCipher:
 
                 return result
             case Mode.CTR:
-                return b'e'
+                cipher = self.__block_cipher_decrypt(self.__iv)
+                result = self.xor(cipher, data)
+
+                int_iv = int.from_bytes(self.__iv, byteorder='big')
+                int_iv += 1
+                self.__iv = int_iv.to_bytes((int_iv.bit_length() + 7) // 8, byteorder='big')
+
+                return result
 
     def encrypt(self, data: bytes, iv: bytes = None) -> bytes:
         if iv is not None:

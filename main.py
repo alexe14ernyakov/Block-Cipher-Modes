@@ -28,6 +28,18 @@ def task3():
     print('Decrypted ciphertext 2: ', cb3_2.decrypt(ciphertext3_2, iv3_2))
     print()
 
+    hex_key3_3 = '36f18357be4dbd77f050515c73fcf9f2'
+    key3_3 = bytes.fromhex(hex_key3_3)
+
+    hex_ciphertext3_3 = '69dda8455c7dd4254bf353b773304eec0ec7702330098ce7f7520d1cbbb20fc388d1b0adb5054dbd7370849dbf0b88d393f252e764f1f5f7ad97ef79d59ce29f5f51eeca32eabedd9afa9329'
+    iv3_3 = bytes.fromhex(hex_ciphertext3_3[0:32])
+    ciphertext3_3 = bytes.fromhex(hex_ciphertext3_3[32::])
+
+    cb3_3 = BlockCipher(key3_3, Mode.CTR)
+
+    print('Decrypted ciphertext 3: ', cb3_3.decrypt(ciphertext3_3, iv3_3))
+    print()
+
 
 def task4():
     print('TASK 4')
@@ -64,6 +76,14 @@ def task4():
     print('Encrypted text with OFB: ', encrypted_text4_4, '; length: ', len(encrypted_text4_4))
     decrypted_text4_4 = bc4_4.decrypt(encrypted_text4_4, custom_iv)
     print('Decrypted text with OFB: ', decrypted_text4_4, '; length: ', len(decrypted_text4_4))
+    print()
+
+    bc4_5 = BlockCipher(b'sixteen-byte-key', Mode.CTR)
+    print('Plaintext:               ', text, '; length: ', len(text))
+    encrypted_text4_5 = bc4_5.encrypt(text, custom_iv)
+    print('Encrypted text with CTR: ', encrypted_text4_5, '; length: ', len(encrypted_text4_5))
+    decrypted_text4_5 = bc4_5.decrypt(encrypted_text4_5, custom_iv)
+    print('Decrypted text with CTR: ', decrypted_text4_5, '; length: ', len(decrypted_text4_5))
     print()
 
 
