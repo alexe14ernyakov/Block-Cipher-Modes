@@ -14,10 +14,11 @@ class Mode(Enum):
 
 class BlockCipher:
     __BLOCK_SIZE = 16
+    __KEY_SIZE = 16
 
     def __init__(self, key: bytes, mode: Mode):
-        if len(key) != self.__BLOCK_SIZE:
-            raise ValueError("Key length must be 16")
+        if len(key) != self.__KEY_SIZE:
+            raise ValueError(f"Key length must be {self.__KEY_SIZE}")
         self.__key: bytes = key
 
         if mode not in Mode:
@@ -42,8 +43,8 @@ class BlockCipher:
         return bytes(b1 ^ b2 for b1, b2 in zip(vector1, vector2))
 
     def set_key(self, key: bytes):
-        if len(key) != 16:
-            raise ValueError("Key length must be 16")
+        if len(key) != self.__KEY_SIZE:
+            raise ValueError(f"Key length must be {self.__KEY_SIZE}")
         self.__key = key
 
     def set_mode(self, mode: Mode):
@@ -94,6 +95,9 @@ class BlockCipher:
 
                 return result
 
+            case _:
+                raise ValueError("Unknown mode was selected")
+
     def process_block_decrypt(self, data: bytes, is_final_block: bool, padding: str) -> bytes:
         match self.__mode:
             case Mode.ECB:
@@ -141,10 +145,13 @@ class BlockCipher:
 
                 return result
 
+            case _:
+                raise ValueError("Unknown mode was selected")
+
     def encrypt(self, data: bytes, iv: bytes = None) -> bytes:
         if iv is not None:
             if len(iv) != self.__BLOCK_SIZE:
-                raise ValueError("IV length must be 16")
+                raise ValueError(f"IV length must be {self.__BLOCK_SIZE}")
             self.__iv = iv
         else:
             self.__generate_iv()
@@ -160,7 +167,7 @@ class BlockCipher:
     def decrypt(self, data: bytes, iv: bytes = None) -> bytes:
         if iv is not None:
             if len(iv) != self.__BLOCK_SIZE:
-                raise ValueError("IV length must be 16")
+                raise ValueError(f"IV length must be {self.__BLOCK_SIZE}")
             self.__iv = iv
         else:
             self.__generate_iv()
