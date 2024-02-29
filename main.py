@@ -28,53 +28,47 @@ def task2_5():
 
 
 def task3():
-    hex_key3_1 = '140b41b22a29beb4061bda66b6747e14'
-    key3_1 = bytes.fromhex(hex_key3_1)
+    BLOCK_SIZE = 16
 
-    hex_ciphertext3_1 = '4ca00ff4c898d61e1edbf1800618fb2828a226d160dad07883d04e008a7897ee2e4b7465d5290d0c0e6c6822236e1daafb94ffe0c5da05d9476be028ad7c1d81'
-    iv3_1 = bytes.fromhex(hex_ciphertext3_1[0:32])
-    ciphertext3_1 = bytes.fromhex(hex_ciphertext3_1[32::])
+    cbc_hex_key = '140b41b22a29beb4061bda66b6747e14'
+    hex_ciphertext3_1 = '''4ca00ff4c898d61e1edbf1800618fb2828a226d160dad07883d04e008a7897ee
+                           2e4b7465d5290d0c0e6c6822236e1daafb94ffe0c5da05d9476be028ad7c1d81'''
 
-    cb3_1 = BlockCipher(key3_1, Mode.CBC)
+    cbc_key = bytes.fromhex(cbc_hex_key)
+    iv3_1 = bytes.fromhex(hex_ciphertext3_1[0:2*BLOCK_SIZE])
+    ciphertext3_1 = bytes.fromhex(hex_ciphertext3_1[2*BLOCK_SIZE::])
 
-    print('Decrypted ciphertext 1: ', cb3_1.decrypt(ciphertext3_1, iv3_1))
-    print()
+    cb3_1 = BlockCipher(cbc_key, Mode.CBC)
+    print(f'Decrypted ciphertext 1: {cb3_1.decrypt(ciphertext3_1, iv3_1)}')
 
-    hex_key3_2 = '140b41b22a29beb4061bda66b6747e14'
-    key3_2 = bytes.fromhex(hex_key3_2)
+    hex_ciphertext3_2 = '''5b68629feb8606f9a6667670b75b38a5b4832d0f26e1ab7da33249de7d4afc48
+                           e713ac646ace36e872ad5fb8a512428a6e21364b0c374df45503473c5242a253'''
 
-    hex_ciphertext3_2 = '5b68629feb8606f9a6667670b75b38a5b4832d0f26e1ab7da33249de7d4afc48e713ac646ace36e872ad5fb8a512428a6e21364b0c374df45503473c5242a253'
-    iv3_2 = bytes.fromhex(hex_ciphertext3_2[0:32])
-    ciphertext3_2 = bytes.fromhex(hex_ciphertext3_2[32::])
+    iv3_2 = bytes.fromhex(hex_ciphertext3_2[0:2*BLOCK_SIZE])
+    ciphertext3_2 = bytes.fromhex(hex_ciphertext3_2[2*BLOCK_SIZE::])
 
-    cb3_2 = BlockCipher(key3_2, Mode.CBC)
+    cb3_2 = BlockCipher(cbc_key, Mode.CBC)
+    print(f'Decrypted ciphertext 2: {cb3_2.decrypt(ciphertext3_2, iv3_2)}')
 
-    print('Decrypted ciphertext 2: ', cb3_2.decrypt(ciphertext3_2, iv3_2))
-    print()
+    ctr_hex_key = '36f18357be4dbd77f050515c73fcf9f2'
+    hex_ciphertext3_3 = '''69dda8455c7dd4254bf353b773304eec0ec7702330098ce7f7520d1cbbb20fc388d1b0adb505
+                           4dbd7370849dbf0b88d393f252e764f1f5f7ad97ef79d59ce29f5f51eeca32eabedd9afa9329'''
 
-    hex_key3_3 = '36f18357be4dbd77f050515c73fcf9f2'
-    key3_3 = bytes.fromhex(hex_key3_3)
+    ctr_key = bytes.fromhex(ctr_hex_key)
+    iv3_3 = bytes.fromhex(hex_ciphertext3_3[0:2*BLOCK_SIZE])
+    ciphertext3_3 = bytes.fromhex(hex_ciphertext3_3[2*BLOCK_SIZE::])
 
-    hex_ciphertext3_3 = '69dda8455c7dd4254bf353b773304eec0ec7702330098ce7f7520d1cbbb20fc388d1b0adb5054dbd7370849dbf0b88d393f252e764f1f5f7ad97ef79d59ce29f5f51eeca32eabedd9afa9329'
-    iv3_3 = bytes.fromhex(hex_ciphertext3_3[0:32])
-    ciphertext3_3 = bytes.fromhex(hex_ciphertext3_3[32::])
-
-    cb3_3 = BlockCipher(key3_3, Mode.CTR)
-
-    print('Decrypted ciphertext 3: ', cb3_3.decrypt(ciphertext3_3, iv3_3))
-    print()
-
-    hex_key3_4 = '36f18357be4dbd77f050515c73fcf9f2'
-    key3_4 = bytes.fromhex(hex_key3_4)
+    cb3_3 = BlockCipher(ctr_key, Mode.CTR)
+    print(f'Decrypted ciphertext 3: {cb3_3.decrypt(ciphertext3_3, iv3_3)}')
 
     hex_ciphertext3_4 = '770b80259ec33beb2561358a9f2dc617e46218c0a53cbeca695ae45faa8952aa0e311bde9d4e01726d3184c34451'
-    iv3_4 = bytes.fromhex(hex_ciphertext3_4[0:32])
-    ciphertext3_4 = bytes.fromhex(hex_ciphertext3_4[32::])
 
-    cb3_4 = BlockCipher(key3_4, Mode.CTR)
+    iv3_4 = bytes.fromhex(hex_ciphertext3_4[0:2*BLOCK_SIZE])
+    ciphertext3_4 = bytes.fromhex(hex_ciphertext3_4[2*BLOCK_SIZE::])
 
-    print('Decrypted ciphertext 4: ', cb3_4.decrypt(ciphertext3_4, iv3_4))
-    print()
+    cb3_4 = BlockCipher(ctr_key, Mode.CTR)
+
+    print(f'Decrypted ciphertext 4: {cb3_4.decrypt(ciphertext3_4, iv3_4)}\n')
 
 
 def task4():
