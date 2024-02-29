@@ -73,8 +73,7 @@ def task3():
 
 
 def task4():
-    #plaintext = b'text-consisting-of-two-and-a-half-blocks'
-    plaintext = b'text-consisting-of-two-and-a-hal'
+    plaintext = b'text-consisting-of-two-and-a-half-blocks'
     custom_iv = b'sixteen-bytes-iv'
     key4 = b'sixteen-byte-key'
 
