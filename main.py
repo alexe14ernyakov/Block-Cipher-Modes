@@ -72,48 +72,44 @@ def task3():
 
 
 def task4():
-    text = b'text-consisting-of-two-and-a-half-blocks'
+    plaintext = b'text-consisting-of-two-and-a-half-blocks'
     custom_iv = b'sixteen-bytes-iv'
+    key4 = b'sixteen-byte-key'
 
-    bc4_1 = BlockCipher(b'sixteen-byte-key', Mode.ECB)
-    print('Plaintext:               ', text, '; length: ', len(text))
-    encrypted_text4_1 = bc4_1.encrypt(text)
-    print('Encrypted text with ECB: ', encrypted_text4_1, '; length: ', len(encrypted_text4_1))
+    bc4_1 = BlockCipher(key4, Mode.ECB)
+    print(f'Plaintext:               {plaintext}')
+    encrypted_text4_1 = bc4_1.encrypt(plaintext)
+    print(f'Encrypted text with ECB: {encrypted_text4_1}')
     decrypted_text4_1 = bc4_1.decrypt(encrypted_text4_1)
-    print('Decrypted text with ECB: ', decrypted_text4_1, '; length: ', len(decrypted_text4_1))
-    print()
+    print(f'Decrypted text with ECB: {decrypted_text4_1}\n')
 
-    bc4_2 = BlockCipher(b'sixteen-byte-key', Mode.CBC)
-    print('Plaintext:               ', text, '; length: ', len(text))
-    encrypted_text4_2 = bc4_2.encrypt(text, custom_iv)
-    print('Encrypted text with CBC: ', encrypted_text4_2, '; length: ', len(encrypted_text4_2))
+    bc4_2 = BlockCipher(key4, Mode.CBC)
+    print(f'Plaintext:               {plaintext}')
+    encrypted_text4_2 = bc4_2.encrypt(plaintext, custom_iv)
+    print(f'Encrypted text with CBC: {encrypted_text4_2}')
     decrypted_text4_2 = bc4_2.decrypt(encrypted_text4_2, custom_iv)
-    print('Decrypted text with CBC: ', decrypted_text4_2, '; length: ', len(decrypted_text4_2))
-    print()
+    print(f'Decrypted text with CBC: {decrypted_text4_2}\n')
 
-    bc4_3 = BlockCipher(b'sixteen-byte-key', Mode.CFB)
-    print('Plaintext:               ', text, '; length: ', len(text))
-    encrypted_text4_3 = bc4_3.encrypt(text, custom_iv)
-    print('Encrypted text with CFB: ', encrypted_text4_3, '; length: ', len(encrypted_text4_3))
+    bc4_3 = BlockCipher(key4, Mode.CFB)
+    print(f'Plaintext:               {plaintext}')
+    encrypted_text4_3 = bc4_3.encrypt(plaintext, custom_iv)
+    print(f'Encrypted text with CFB: {encrypted_text4_3}')
     decrypted_text4_3 = bc4_3.decrypt(encrypted_text4_3, custom_iv)
-    print('Decrypted text with CFB: ', decrypted_text4_3, '; length: ', len(decrypted_text4_3))
-    print()
+    print(f'Decrypted text with CFB: {decrypted_text4_3}\n')
 
-    bc4_4 = BlockCipher(b'sixteen-byte-key', Mode.OFB)
-    print('Plaintext:               ', text, '; length: ', len(text))
-    encrypted_text4_4 = bc4_4.encrypt(text, custom_iv)
-    print('Encrypted text with OFB: ', encrypted_text4_4, '; length: ', len(encrypted_text4_4))
+    bc4_4 = BlockCipher(key4, Mode.OFB)
+    print(f'Plaintext:               {plaintext}')
+    encrypted_text4_4 = bc4_4.encrypt(plaintext, custom_iv)
+    print(f'Encrypted text with OFB: {encrypted_text4_4}')
     decrypted_text4_4 = bc4_4.decrypt(encrypted_text4_4, custom_iv)
-    print('Decrypted text with OFB: ', decrypted_text4_4, '; length: ', len(decrypted_text4_4))
-    print()
+    print(f'Decrypted text with OFB: {decrypted_text4_4}\n')
 
-    bc4_5 = BlockCipher(b'sixteen-byte-key', Mode.CTR)
-    print('Plaintext:               ', text, '; length: ', len(text))
-    encrypted_text4_5 = bc4_5.encrypt(text, custom_iv)
-    print('Encrypted text with CTR: ', encrypted_text4_5, '; length: ', len(encrypted_text4_5))
+    bc4_5 = BlockCipher(key4, Mode.CTR)
+    print(f'Plaintext:               {plaintext}')
+    encrypted_text4_5 = bc4_5.encrypt(plaintext, custom_iv)
+    print(f'Encrypted text with CTR: {encrypted_text4_5}')
     decrypted_text4_5 = bc4_5.decrypt(encrypted_text4_5, custom_iv)
-    print('Decrypted text with CTR: ', decrypted_text4_5, '; length: ', len(decrypted_text4_5))
-    print()
+    print(f'Decrypted text with CTR: {decrypted_text4_5}\n')
 
 
 def main():
