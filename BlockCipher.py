@@ -119,7 +119,7 @@ class BlockCipher:
 
                 return result
             case Mode.CTR:
-                cipher = self.__block_cipher_decrypt(self.__iv)
+                cipher = self.__block_cipher_encrypt(self.__iv)
                 result = self.xor(cipher, data)
 
                 int_iv = int.from_bytes(self.__iv, byteorder='big')
