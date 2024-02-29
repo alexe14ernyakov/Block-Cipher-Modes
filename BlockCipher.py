@@ -16,12 +16,12 @@ class BlockCipher:
     __BLOCK_SIZE = 16
 
     def __init__(self, key, mode):
-        if len(key) != 16:
+        if len(key) != self.__BLOCK_SIZE:
             raise ValueError("Key length must be 16")
 
-        self.__key = key
-        self.__mode = mode
-        self.__iv = None
+        self.__key: bytes = key
+        self.__mode: Mode  = mode
+        self.__iv: bytes = None
 
     def __block_cipher_encrypt(self, data: bytes) -> bytes:
         cipher = AES.new(self.__key, AES.MODE_ECB)
@@ -130,6 +130,9 @@ class BlockCipher:
 
     def encrypt(self, data: bytes, iv: bytes = None) -> bytes:
         if iv is not None:
+            if len(iv) != self.__BLOCK_SIZE:
+                raise ValueError("IV length must be 16")
+
             self.__iv = iv
         else:
             self.__generate_iv()
@@ -144,6 +147,9 @@ class BlockCipher:
 
     def decrypt(self, data: bytes, iv: bytes = None) -> bytes:
         if iv is not None:
+            if len(iv) != self.__BLOCK_SIZE:
+                raise ValueError("IV length must be 16")
+
             self.__iv = iv
         else:
             self.__generate_iv()

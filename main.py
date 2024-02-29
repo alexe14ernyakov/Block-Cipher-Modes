@@ -3,7 +3,6 @@ from Crypto.Cipher import AES
 
 
 def task3():
-    print('TASK 3')
     hex_key3_1 = '140b41b22a29beb4061bda66b6747e14'
     key3_1 = bytes.fromhex(hex_key3_1)
 
@@ -40,9 +39,20 @@ def task3():
     print('Decrypted ciphertext 3: ', cb3_3.decrypt(ciphertext3_3, iv3_3))
     print()
 
+    hex_key3_4 = '36f18357be4dbd77f050515c73fcf9f2'
+    key3_4 = bytes.fromhex(hex_key3_3)
+
+    hex_ciphertext3_4 = '770b80259ec33beb2561358a9f2dc617e46218c0a53cbeca695ae45faa8952aa0e311bde9d4e01726d3184c34451'
+    iv3_4 = bytes.fromhex(hex_ciphertext3_4[0:32])
+    ciphertext3_4 = bytes.fromhex(hex_ciphertext3_4[32::])
+
+    cb3_4 = BlockCipher(key3_4, Mode.CTR)
+
+    print('Decrypted ciphertext 4: ', cb3_4.decrypt(ciphertext3_4, iv3_4))
+    print()
+
 
 def task4():
-    print('TASK 4')
     text = b'text-consisting-of-two-and-a-half-blocks'
     custom_iv = b'sixteen-bytes-iv'
 
@@ -88,7 +98,10 @@ def task4():
 
 
 def main():
+    print('TASK 3')
     task3()
+
+    print('TASK 4')
     task4()
 
     return 0
