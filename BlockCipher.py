@@ -1,5 +1,7 @@
 import secrets
 from enum import Enum
+
+import Crypto.Cipher._mode_ecb
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 
@@ -26,14 +28,13 @@ class BlockCipher:
         self.__mode: Mode = mode
 
         self.__iv: bytes | None = None
+        self.__cipher: Crypto.Cipher._mode_ecb.EcbMode = AES.new(self.__key, AES.MODE_ECB)
 
     def __block_cipher_encrypt(self, data: bytes) -> bytes:
-        cipher = AES.new(self.__key, AES.MODE_ECB)
-        return cipher.encrypt(data)
+        return self.__cipher.encrypt(data)
 
     def __block_cipher_decrypt(self, data: bytes) -> bytes:
-        cipher = AES.new(self.__key, AES.MODE_ECB)
-        return cipher.decrypt(data)
+        return self.__cipher.decrypt(data)
 
     def __generate_iv(self):
         self.__iv = secrets.token_bytes(self.__BLOCK_SIZE)
@@ -114,7 +115,7 @@ class BlockCipher:
                 result = self.xor(cipher, self.__iv)
                 self.__iv = data
 
-                if is_final_block:
+                if is_final_block and len(result) != self.__BLOCK_SIZE:
                     result = unpad(result, self.__BLOCK_SIZE, padding)
 
                 return result

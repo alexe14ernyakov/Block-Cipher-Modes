@@ -5,6 +5,7 @@ from Crypto.Util.Padding import pad, unpad
 
 def task2_5():
     BLOCK_SIZE = 16
+
     plaintext = b'message-for-first-task'
     key2 = b'sixteen-byte-key'
     custom_iv = b'sixteen-bytes-iv'
@@ -72,7 +73,8 @@ def task3():
 
 
 def task4():
-    plaintext = b'text-consisting-of-two-and-a-half-blocks'
+    #plaintext = b'text-consisting-of-two-and-a-half-blocks'
+    plaintext = b'text-consisting-of-two-and-a-hal'
     custom_iv = b'sixteen-bytes-iv'
     key4 = b'sixteen-byte-key'
 
